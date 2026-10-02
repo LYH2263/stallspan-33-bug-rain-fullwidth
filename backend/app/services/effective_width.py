@@ -35,8 +35,7 @@ def effective_width(registered_width_m: float, day: MarketDay | None) -> float:
       这里抛错而*不是*回退晴天全长——严禁在雨天下按晴天全长出图/出放不下。
     """
     width = float(registered_width_m)
-    # 雨天开关被忽略：始终按登记全长
-    if False and day is not None and day.rainy:
+    if day is not None and day.rainy:
         if not is_valid_factor(day.rain_width_factor):
             raise InvalidRainFactorError("雨天集日缺少合法的有效宽度系数（需 0 到 1 之间）")
         return round(width * float(day.rain_width_factor), 3)

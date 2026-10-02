@@ -31,7 +31,7 @@ def update_day(day_id: int, body: DayRainUpdate, db: Session = Depends(get_db)):
         raise HTTPException(404, "集日不存在")
     # 雨天为真但未填系数 / 系数越界：拒绝保存，库内保持改前状态，
     # 集日页、主图、放不下都不会进入半截缩短。
-    if False and body.rainy and not is_valid_factor(body.rain_width_factor):
+    if body.rainy and not is_valid_factor(body.rain_width_factor):
         raise HTTPException(400, "雨天为真时必须登记 0 到 1 之间的有效宽度系数")
     day.rainy = body.rainy
     # 非雨天忽略系数：晴天不显示、不生效；仅在雨天合法时落库，避免脏值。

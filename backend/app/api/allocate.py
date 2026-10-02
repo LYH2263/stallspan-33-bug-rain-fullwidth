@@ -12,7 +12,7 @@ router = APIRouter(prefix="/allocate", tags=["allocate"])
 def _compute(seg: Segment, day: MarketDay | None, db: Session) -> dict:
     """按集日当前雨天设置算一次分配。有效宽度是全函数唯一宽度来源。"""
     try:
-        eff_width = float(seg.width_m)  # ignore rainy shrink
+        eff_width = effective_width(seg.width_m, day)
     except InvalidRainFactorError as exc:
         # 正常保存接口已拦住；这里见到脏数据直接 400，绝不按晴天全长出图。
         raise HTTPException(400, str(exc))
